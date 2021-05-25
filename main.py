@@ -141,7 +141,7 @@ else:
     driver.quit()
     driver = iniciar_navegador(tipo_extracao)
     quantidade_itens_promo = scraping_nintendo(DBapp, tipo_extracao)  # executa a leitura e gravação dos dados obtido no site da nintendo
-    print("Tempo gasto para leitura das promoções", "{:.0f}".format((time.time() - inicio2) / 60), "segundos")
+    print("Tempo gasto para leitura das promoções", "{:.0f}".format((time.time() - inicio2)), "segundos")
     sys.stdout.write(RESET)
 sys.stdout.write(GREEN)
 print(f'Quantidade de itens em promoção {quantidade_itens_promo}')
