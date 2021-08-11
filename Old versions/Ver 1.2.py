@@ -10,7 +10,7 @@ import time
 import mysql.connector
 import sys
 
-Ver = "0.2"
+Ver = "1.2"
 
 class dados_dos_jogos:
     def __init__(self):
@@ -26,7 +26,7 @@ def iniciar_db():
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="root",
+        password="abricó",
         database="db_apppromonintendo"
     )
     print(mydb)
@@ -51,6 +51,14 @@ def iniciar_navegador(tipo_extracao):
     driver.minimize_window()
     return driver
 
+#imprime a % de jogos lidos
+def imprime_avanco(i, max):
+    sys.stdout.write('\r')
+    sys.stdout.write("[%-40s] %d%%" % ('=' * int(i/(max/40)), (100/max * i)))
+    #sys.stdout.write("%d%%" % (100/max * i))
+    sys.stdout.flush()
+
+#grava dados lidos no banco de dados
 def gravar_db (DBapp, dados_jogo_lido, tipo_extracao):
     meucursor =DBapp.cursor()
     if tipo_extracao == 1: #grava promos
@@ -64,7 +72,9 @@ def gravar_db (DBapp, dados_jogo_lido, tipo_extracao):
         meucursor.execute (comando, valores)
         DBapp.commit()
 
+#retira caracteres de R$ do preço e converte para 0 valores inválidos
 def trata_preco(preco):
+    #print (preco)
     if preco == 'Gratuito' or preco == None:
         preco = 0.00;
     else:
@@ -72,8 +82,10 @@ def trata_preco(preco):
         preco = preco.replace(',','.')
     return preco
 
+#faz a leitura de dados no site da Nintendo
 def scraping_nintendo(DBapp, tipo_extracao):
     indice = 1
+    total_itens = int ((driver.find_element_by_xpath ('//*[@id="result-count"]').text).replace (' resultados','')) #armazena quantos itens disponíveis para leitura
     dados_jogo_lido = dados_dos_jogos()
     while True:
         try:
@@ -81,11 +93,13 @@ def scraping_nintendo(DBapp, tipo_extracao):
         except Exception:
             if tipo_extracao == 0:
                 sys.stdout.write(GREEN)
-                print (f'Lidos {indice} jogos do site da Nintendo BR')
+                print (f'\nJogos disponível segundo o site da Nitendo {total_itens}')
+                print (f'Lidos {indice-1} jogos do site da Nintendo BR')
                 sys.stdout.write(RESET)
             return (indice - 1)  # encerra o scrapping caso não encontre mais jogos e retorna a quantidade de jogos em promoção
         try:
             driver.find_element_by_id("btn-load-more").click()  # clica no botão para carregar mais
+            time.sleep(0.5)
         except Exception:
             pass
         if tipo_extracao == 1: #atualização de promo
@@ -103,6 +117,7 @@ def scraping_nintendo(DBapp, tipo_extracao):
             dados_jogo_lido.msrp = trata_preco(driver.find_element_by_xpath(f'//*[@id="games-list-container"]/ul/li[{indice}]/game-tile').get_attribute('msrp'))
             dados_jogo_lido.url_img = driver.find_element_by_xpath(f'//*[@id="games-list-container"]/ul/li[{indice}]/game-tile').get_attribute('image')
             gravar_db(DBapp, dados_jogo_lido, tipo_extracao)  # grava dados lido na DB
+        imprime_avanco(indice, total_itens)
         indice += 1
 
 
@@ -141,10 +156,10 @@ else:
     driver.quit()
     driver = iniciar_navegador(tipo_extracao)
     quantidade_itens_promo = scraping_nintendo(DBapp, tipo_extracao)  # executa a leitura e gravação dos dados obtido no site da nintendo
-    print("Tempo gasto para leitura das promoções", "{:.0f}".format((time.time() - inicio2)), "segundos")
+    print("\nTempo gasto para leitura das promoções", "{:.0f}".format((time.time() - inicio2)), "segundos")
     sys.stdout.write(RESET)
 sys.stdout.write(GREEN)
-print(f'Quantidade de itens em promoção {quantidade_itens_promo}')
+print(f'\nQuantidade de itens em promoção {quantidade_itens_promo}')
 sys.stdout.write(RESET)
 sys.stdout.write(CYAN)
 print('\n\nPrograma finalizado')

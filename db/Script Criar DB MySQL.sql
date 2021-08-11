@@ -8,7 +8,7 @@ create database db_appPromoNintendo;
 use db_appPromoNintendo;
 
 CREATE TABLE DB_Nintendo_BR (
-  nsuid VARCHAR(15) NOT NULL,
+  nsuid VARCHAR(20) NOT NULL,
   titulo TEXT,
   msrp FLOAT,
   img_url TEXT,
@@ -16,7 +16,7 @@ CREATE TABLE DB_Nintendo_BR (
 );
 
 CREATE TABLE Jogos_em_promo (
-  DB_Nintendo_BR_nsuid VARCHAR(15) NOT NULL,
+  DB_Nintendo_BR_nsuid VARCHAR(20) NOT NULL,
   sale_price FLOAT,
   validade_promo TEXT,
   FOREIGN KEY (DB_Nintendo_BR_nsuid) REFERENCES DB_Nintendo_BR(nsuid)
