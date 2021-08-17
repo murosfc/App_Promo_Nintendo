@@ -1,0 +1,59 @@
+.grid-container
+{
+   grid-template-columns: 1fr;
+   margin-bottom: 0px;
+}
+.grid-item
+{
+    padding: 10px;
+    margin-bottom: 0px;
+    margin: 0px 10px 100px 0px;    
+}
+
+img.game-pic
+{
+    float:left;
+    border:1px solid #999;
+    padding:3px;    
+    margin-right: 10px;
+        
+}
+
+img.game-pic:after
+{
+    content: "";
+    display: block;
+    clear: both;
+}
+
+img.hearts
+{
+    width: 20px;
+    height: auto;
+    border-style: none;
+}
+
+ul{    
+    margin: 5px;
+    padding: 5px;    
+}
+li{
+    margin-right: -10px;
+    padding: 5px 10px 5px 10px;    
+    background-color: rgb(207, 199, 199);
+    font-family: 'Arimo', sans-serif;
+    font-weight: bold;
+    list-style-type: none;
+    margin-bottom: 2px;      
+    color: black;
+    display: inline-block;
+}
+ul :hover 
+{
+    background-color: rgb(57, 57, 61);      
+    color: gray;    
+}
+li :visited, :link {
+    text-decoration: none;
+    color: black;
+}
