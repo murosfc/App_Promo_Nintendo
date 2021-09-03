@@ -25,7 +25,6 @@ def gravar_db (dados_jogo_lido, tipo_extracao):
     DBapp = iniciar_db()
     meucursor = DBapp.cursor()
     if tipo_extracao == 1: #grava promos
-            #grava na DB principal os que não foram gravados pelo limite de 1000 jogos do site inicial
             comando = (
                 "INSERT IGNORE INTO db_nintendo_br VALUES (%s,%s,%s,%s)")  # atualiza os já existentes somente insere os novos
             valores = (dados_jogo_lido.nsuid, dados_jogo_lido.titulo, dados_jogo_lido.msrp, dados_jogo_lido.url_img)
@@ -35,7 +34,7 @@ def gravar_db (dados_jogo_lido, tipo_extracao):
             valores = (dados_jogo_lido.nsuid, dados_jogo_lido.sale_price, dados_jogo_lido.validade_promo)
             meucursor.execute(comando, valores)
             DBapp.commit()
-    else: #grava todos os jogos
+    elif dados_jogo_lido.nsuid != "": #grava todos os jogos
         comando = ("INSERT IGNORE INTO db_nintendo_br VALUES (%s,%s,%s,%s)") #atualiza os já existentes somente insere os novos
         valores = (dados_jogo_lido.nsuid,dados_jogo_lido.titulo,dados_jogo_lido.msrp,dados_jogo_lido.url_img)
         meucursor.execute (comando, valores)
