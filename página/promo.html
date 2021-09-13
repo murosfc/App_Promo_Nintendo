@@ -3,22 +3,26 @@
     <head>
         <meta charset="utf-8">
         <title>Promoções Nintendo eshop BR</title>
+        <meta name="color-scheme" content="light dark">
+        <meta name="theme-color" content="#fff">        
         <link rel="stylesheet" href="estilo.css">
         
-        <script src="http://code.jquery.com/jquery-2.0.3.min.js" type="text/javascript" ></script>
-        <script src="scripts.js"></script>        
-        
+        <script src="jquery-3.6.0.min.js" type="text/javascript"></script>
+        <script src="scripts.js" type="text/javascript"></script> 
+        <script src="login.js" type="text/javascript"></script>
+        <link rel="icon" href="favicon.ico"> 
     </head>
     
-    <body>
-		<h1>Site de Felipe Muros</h1> 
+    <body onload="ChecaLogin()">
+		<h1>Jogos em promoção</h1> 
         <nav>
             <ul>
-                <li><a href='index.html'>HOME</a></li>
+                <li><a href='index.php'>HOME</a></li>
                 <li><a href='promo.html'>PROMOÇÕES</a></li>
                 <li><a href='favoritos.html'>FAVORITOS</a></li>
             </ul>
         </nav>
+        <span id="login"></span>
         <?php
             include 'sitebuild.php';
             SiteBuild('promo');

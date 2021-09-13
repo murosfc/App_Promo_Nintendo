@@ -14,5 +14,5 @@
         die("Connection failed: " . $con->connect_error);
         }
         return $con;
-    }
+    }   
 ?>
